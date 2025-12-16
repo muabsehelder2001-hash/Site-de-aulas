@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saboaria: O Toque Puro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --roxo: #8A2BE2;
+            --roxo-escuro: #5B2BB0;
+            --turquesa: #00C9B7;
+            --rosa: #FF6B8B;
+            --escuro: #1A1A2E;
+            --cinza: #2D2D44;
+            --branco: #FFFFFF;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: var(--escuro);
+            color: var(--branco);
+            line-height: 1.6;
+        }
+        
+        /* Cabeçalho */
+        .cabecalho {
+            background: var(--escuro);
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--roxo);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--branco);
+            text-decoration: none;
+        }
+        
+        .logo i {
+            color: var(--turquesa);
+            background: var(--roxo);
+            padding: 0.8rem;
+            border-radius: 50%;
+        }
+        
+        /* Botões */
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+        
+        .btn-primario {
+            background: linear-gradient(135deg, var(--roxo), var(--roxo-escuro));
+            color: white;
+        }
+        
+        .btn-secundario {
+            background: var(--cinza);
+            color: white;
+            border: 1px solid var(--roxo);
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.3);
+        }
+        
+        /* Seções */
+        .secao {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Home */
+        .hero {
+            text-align: center;
+            padding: 6rem 2rem;
+            background: linear-gradient(rgba(26, 26, 46, 0.9), rgba(26, 26, 46, 0.9));
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            background: linear-gradient(135deg, var(--roxo), var(--turquesa));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+        
+        .card {
+            background: var(--cinza);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--roxo);
+            transition: 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+            border-color: var(--turquesa);
+        }
+        
+        .card i {
+            font-size: 2.5rem;
+            color: var(--turquesa);
+            margin-bottom: 1rem;
+        }
+        
+        /* Tabelas */
+        .tabela-container {
+            background: var(--cinza);
+            border-radius: 15px;
+            overflow: hidden;
+            margin-top: 2rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th {
+            background: var(--roxo);
+            padding: 1rem;
+            text-align: left;
+        }
+        
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        tr:hover {
+            background: rgba(138, 43, 226, 0.1);
+        }
+        
+        /* Modal de Login */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-conteudo {
+            background: var(--cinza);
+            padding: 3rem;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 500px;
+            border: 2px solid var(--roxo);
+        }
+        
+        .form-grupo {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-grupo label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--turquesa);
+        }
+        
+        .form-grupo input {
+            width: 100%;
+            padding: 1rem;
+            background: var(--escuro);
+            border: 2px solid var(--roxo);
+            border-radius: 8px;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        .sidebar {
+            width: 250px;
+            background: var(--escuro);
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100vh;
+            padding: 2rem 1rem;
+            border-right: 2px solid var(--roxo);
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            transition: 0.3s;
+        }
+        
+        .menu-item:hover, .menu-item.ativo {
+            background: var(--roxo);
+        }
+        
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 70px;
+            }
+            
+            .main-content {
+                margin-left: 70px;
+            }
+            
+            .menu-item span {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header class="cabecalho">
+        <a href="#" class="logo" onclick="mostrarHome()">
+            <i class="fas fa-soap"></i>
+            <span>Saboaria: O Toque Puro</span>
+        </a>
+        
+        <div style="display: flex; gap: 1rem;">
+            <button class="btn btn-secundario" onclick="mostrarLogin()">
+                <i class="fas fa-sign-in-alt"></i> Entrar
+            </button>
+            <button class="btn btn-primario" onclick="mostrarCadastro()">
+                <i class="fas fa-user-plus"></i> Cadastrar
+            </button>
+        </div>
+    </header>
+    
+    <!-- Página Inicial -->
+    <section class="hero" id="home">
+        <h1>Domine a Arte da Saboaria</h1>
+        <p style="font-size: 1.2rem; max-width: 800px; margin: 0 auto 2rem; color: #ccc;">
+            Curso completo de produção e venda de sabonetes artesanais com sistema de gerenciamento profissional
+        </p>
+        <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
+            <button class="btn btn-primario" onclick="mostrarCadastro()">
+                <i class="fas fa-rocket"></i> Começar Agora
+            </button>
+            <button class="btn btn-secundario" onclick="mostrarDemo()">
+                <i class="fas fa-play"></i> Ver Demonstração
+            </button>
+        </div>
+    </section>
+    
+    <!-- Modal de Login -->
+    <div class="modal" id="modalLogin">
+        <div class="modal-conteudo">
+            <h2 style="margin-bottom: 2rem; color: var(--turquesa);">Acessar Plataforma</h2>
+            
+            <form id="formLogin">
+                <div class="form-grupo">
+                    <label>E-mail</label>
+                    <input type="email" id="emailLogin" required>
+                </div>
+                
+                <div class="form-grupo">
+                    <label>Senha</label>
+                    <input type="password" id="senhaLogin" required>
+                </div>
+                
+                <button type="submit" class="btn btn-primario" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </form>
+            
+            <div style="text-align: center; margin-top: 2rem; color: #ccc;">
+                <p>Teste com:<br>
+                   Admin: admin@saboaria.com / admin123<br>
+                   Aluno: maria@email.com / 123456</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="width: 60px; height: 60px; background: var(--roxo); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem; font-size: 1.5rem; font-weight: bold;" id="avatarUsuario">U</div>
+                <div id="nomeUsuario">Usuário</div>
+                <div style="font-size: 0.9rem; color: var(--turquesa);" id="tipoUsuario">Aluno</div>
+            </div>
+            
+            <nav>
+                <a href="#" class="menu-item ativo" onclick="mostrarAba('overview')">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Visão Geral</span>
+                </a>
+                
+                <a href="#" class="menu-item" onclick="mostrarAba('aulas')">
+                    <i class="fas fa-video"></i>
+                    <span>Minhas Aulas</span>
+                </a>
+                
+                <a href="#" class="menu-item" onclick="mostrarAba('alunos')" id="menuAlunos" style="display: none;">
+                    <i class="fas fa-users"></i>
+                    <span>Alunos</span>
+                </a>
+                
+                <a href="#" class="menu-item" onclick="sair()" style="margin-top: 2rem;">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Sair</span>
+                </a>
+            </nav>
+        </aside>
+        
+        <!-- Conteúdo Principal -->
+        <main class="main-content" id="dashboardConteudo">
+            <!-- Conteúdo será carregado aqui -->
+        </main>
+    </div>
+    
+    <script>
+        // Dados do sistema
+        const sistema = {
+            usuarios: [
+                {
+                    id: 1,
+                    nome: "Administrador",
+                    email: "admin@saboaria.com",
+                    senha: "admin123",
+                    tipo: "admin",
+                    avatar: "A"
+                },
+                {
+                    id: 2,
+                    nome: "Maria Silva",
+                    email: "maria@email.com",
+                    senha: "123456",
+                    tipo: "aluno",
+                    avatar: "M"
+                }
+            ],
+            
+            alunos: [
+                {
+                    id: 1,
+                    nome: "Maria Silva",
+                    email: "maria@email.com",
+                    progresso: 65,
+                    ultimoAcesso: "2024-01-20"
+                },
+                {
+                    id: 2,
+                    nome: "João Santos",
+                    email: "joao@email.com",
+                    progresso: 42,
+                    ultimoAcesso: "2024-01-19"
+                }
+            ],
+            
+            aulas: [
+                {
+                    id: 1,
+                    titulo: "Introdução à Saboaria",
+                    descricao: "Conceitos básicos e materiais essenciais",
+                    duracao: "25:30",
+                    assistida: true
+                },
+                {
+                    id: 2,
+                    titulo: "Segurança no Laboratório",
+                    descricao: "Equipamentos de proteção e boas práticas",
+                    duracao: "18:45",
+                    assistida: true
+                },
+                {
+                    id: 3,
+                    titulo: "Primeira Receita",
+                    descricao: "Passo a passo para seu primeiro sabonete",
+                    duracao: "32:15",
+                    assistida: false
+                }
+            ]
+        };
+        
+        // Estado atual
+        let usuarioAtual = null;
+        let abaAtual = 'overview';
+        
+        // Funções de navegação
+        function mostrarHome() {
+            document.getElementById('home').style.display = 'block';
+            document.getElementById('dashboard').style.display = 'none';
+            document.getElementById('modalLogin').style.display = 'none';
+        }
+        
+        function mostrarLogin() {
+            document.getElementById('modalLogin').style.display = 'flex';
+        }
+        
+        function mostrarCadastro() {
+            alert('Em produção, isso abriria o formulário de cadastro');
+        }
+        
+        function mostrarDemo() {
+            // Login automático como admin para demo
+            fazerLogin('admin@saboaria.com', 'admin123');
+        }
+        
+        // Fazer login
+        document.getElementById('formLogin').onsubmit = function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('emailLogin').value;
+            const senha = document.getElementById('senhaLogin').value;
+            
+            fazerLogin(email, senha);
+        };
+        
+        function fazerLogin(email, senha) {
+            const usuario = sistema.usuarios.find(u => u.email === email && u.senha === senha);
+            
+            if (usuario) {
+                usuarioAtual = usuario;
+                document.getElementById('modalLogin').style.display = 'none';
+                document.getElementById('home').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'flex';
+                
+                // Atualizar informações do usuário
+                document.getElementById('avatarUsuario').textContent = usuario.avatar;
+                document.getElementById('nomeUsuario').textContent = usuario.nome;
+                document.getElementById('tipoUsuario').textContent = 
+                    usuario.tipo === 'admin' ? 'Administrador' : 'Aluno';
+                
+                // Mostrar/ocultar menu de alunos
+                if (usuario.tipo === 'admin') {
+                    document.getElementById('menuAlunos').style.display = 'flex';
+                }
+                
+                // Carregar dashboard
+                mostrarAba(abaAtual);
+                
+                alert(`Bem-vindo(a), ${usuario.nome}!`);
+            } else {
+                alert('E-mail ou senha incorretos!');
+            }
+        }
+        
+        // Navegação no dashboard
+        function mostrarAba(aba) {
+            abaAtual = aba;
+            
+            // Atualizar menu ativo
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('ativo');
+            });
+            event.target.closest('.menu-item').classList.add('ativo');
+            
+            // Carregar conteúdo
+            const conteudo = document.getElementById('dashboardConteudo');
+            
+            if (aba === 'overview') {
+                mostrarVisaoGeral();
+            } else if (aba === 'aulas') {
+                mostrarAulas();
+            } else if (aba === 'alunos') {
+                mostrarAlunos();
+            }
+        }
+        
+        function mostrarVisaoGeral() {
+            let html = `
+                <h1 style="margin-bottom: 2rem; color: var(--turquesa);">Visão Geral</h1>
+                
+                <div class="cards">
+                    <div class="card">
+                        <i class="fas fa-chart-line"></i>
+                        <h3>Progresso</h3>
+                        <p>${usuarioAtual.tipo === 'aluno' ? '65% completo' : '48 alunos ativos'}</p>
+                    </div>
+                    
+                    <div class="card">
+                        <i class="fas fa-video"></i>
+                        <h3>Aulas</h3>
+                        <p>${sistema.aulas.length} aulas disponíveis</p>
+                    </div>
+                    
+                    <div class="card">
+                        <i class="fas fa-users"></i>
+                        <h3>Comunidade</h3>
+                        <p>${sistema.alunos.length} alunos matriculados</p>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 3rem;">
+                    <h2>Atividade Recente</h2>
+                    <div class="tabela-container">
+                        <table>
+                            <tr>
+                                <th>Data</th>
+                                <th>Atividade</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr>
+                                <td>2024-01-20</td>
+                                <td>Aula: Introdução à Saboaria</td>
+                                <td><span style="color: var(--turquesa);">✓ Concluída</span></td>
+                            </tr>
+                            <tr>
+                                <td>2024-01-19</td>
+                                <td>Material: Lista de Materiais</td>
+                                <td><span style="color: var(--turquesa);">✓ Baixado</span></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('dashboardConteudo').innerHTML = html;
+        }
+        
+        function mostrarAulas() {
+            let html = `
+                <h1 style="margin-bottom: 2rem; color: var(--turquesa);">Minhas Aulas</h1>
+                
+                <div class="cards">
+            `;
+            
+            sistema.aulas.forEach(aula => {
+                html += `
+                    <div class="card">
+                        <i class="fas fa-play-circle"></i>
+                        <h3>${aula.titulo}</h3>
+                        <p>${aula.descricao}</p>
+                        <p style="color: #ccc; margin: 1rem 0;">${aula.duracao}</p>
+                        <button class="btn ${aula.assistida ? 'btn-secundario' : 'btn-primario'}" onclick="assistirAula(${aula.id})">
+                            <i class="fas fa-play"></i> ${aula.assistida ? 'Assistir Novamente' : 'Assistir Aula'}
+                        </button>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            document.getElementById('dashboardConteudo').innerHTML = html;
+        }
+        
+        function mostrarAlunos() {
+            let html = `
+                <h1 style="margin-bottom: 2rem; color: var(--turquesa);">Gerenciamento de Alunos</h1>
+                
+                <div class="tabela-container">
+                    <table>
+                        <tr>
+                            <th>Nome</th>
+                            <th>E-mail</th>
+                            <th>Progresso</th>
+                      
